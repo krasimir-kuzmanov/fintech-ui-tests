@@ -18,8 +18,8 @@ This project is designed to validate end-to-end user flows in `fintech-frontend`
 - JDK 21 installed
 - SDKMAN available (project includes `.sdkmanrc`)
 - No local Gradle install required (wrapper included)
-- `fintech-backend` running on `http://localhost:8080`
-- `fintech-frontend` running on `http://localhost:5173`
+- `fintech-backend` running (default: `http://localhost:8080`)
+- `fintech-frontend` running (default: `http://localhost:5174`)
 
 ## Run Locally
 From the project root:
@@ -29,16 +29,30 @@ sdk env
 ./gradlew test
 ```
 
-## Target Applications
-- Frontend under test: `http://localhost:5173`
-- Backend used by frontend: `http://localhost:8080`
+Override config in CI or locally (optional):
 
-Before running UI tests, start:
-- `fintech-backend`
-- `fintech-frontend` (with `VITE_API_BASE_URL=http://localhost:8080`)
+```bash
+./gradlew test -Dui.baseUrl=http://ci-host:5174 -Dapi.baseUrl=http://ci-host:8080 -Dselenide.timeoutMs=10000
+```
+
+## Runtime Configuration
+Test configuration is loaded from `src/test/resources/application.properties`.
+
+Required properties:
+- `ui.baseUrl`
+- `api.baseUrl`
+
+Optional property:
+- `selenide.timeoutMs` (defaults to `10000` if missing/invalid)
 
 ## Project Layout
-- Test sources: `src/test/java`
+- This is a test-only project (no `src/main`).
+- Test sources: `src/test/java/com/example/fintech/ui`
+- Main packages:
+- `config` (Selenide and test configuration)
+- `pages` (Page Objects)
+- `support/api` (API helpers for test setup/cleanup)
+- `tests` (UI test classes)
 - Test resources: `src/test/resources`
 
 ## Common Gradle Tasks
@@ -47,5 +61,5 @@ Before running UI tests, start:
 - `./gradlew build` - compile and run all checks
 
 ## Notes
-- This repository currently contains the UI test project scaffold and dependencies.
-- Initial Selenide test coverage can be added for login, registration, dashboard balance, funding, payment, and logout flows.
+- Browser configuration is centralized in `src/test/java/com/example/fintech/ui/config/SelenideConfig.java`.
+- Base test setup is in `src/test/java/com/example/fintech/ui/tests/BaseUiTest.java`.
