@@ -1,18 +1,13 @@
 # fintech-ui-tests
 
-UI test suite for the Fintech project using Selenide and JUnit 5.
+UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 
-This project is designed to validate end-to-end user flows in `fintech-frontend` against the real `fintech-backend`.
-
-**Tech Stack**
-- Java: 21 (Gradle toolchain)
-- Build: Gradle Wrapper
-- Test Framework: JUnit 5
-- UI Automation: Selenide
-- API Helpers (optional in UI flows): RestAssured
-
-## SDK
-- Java SDK: JDK 21 (Gradle toolchain targets Java 21)
+## Tech Stack
+- Java 21 (Gradle toolchain)
+- Gradle Wrapper
+- JUnit 5
+- Selenide
+- RestAssured (for test support APIs)
 
 ## Prerequisites
 - JDK 21 installed
@@ -21,44 +16,32 @@ This project is designed to validate end-to-end user flows in `fintech-frontend`
 - `fintech-backend` running (default: `http://localhost:8080`)
 - `fintech-frontend` running (default: `http://localhost:5174`)
 
-## Run Locally
-From the project root:
-
+## Run
 ```bash
 sdk env
 ./gradlew test
 ```
 
-Override config in CI or locally (optional):
+## Configuration
+Loaded from `src/test/resources/application.properties`.
 
-```bash
-./gradlew test -Dui.baseUrl=http://ci-host:5174 -Dapi.baseUrl=http://ci-host:8080 -Dselenide.timeoutMs=10000
-```
-
-## Runtime Configuration
-Test configuration is loaded from `src/test/resources/application.properties`.
-
-Required properties:
+Required:
 - `ui.baseUrl`
 - `api.baseUrl`
 
-Optional property:
-- `selenide.timeoutMs` (defaults to `10000` if missing/invalid)
+Optional:
+- `selenide.timeoutMs` (default `10000`)
 
-## Project Layout
-- This is a test-only project (no `src/main`).
-- Test sources: `src/test/java/com/example/fintech/ui`
-- Main packages:
-- `config` (Selenide and test configuration)
-- `pages` (Page Objects)
-- `support/api` (API helpers for test setup/cleanup)
-- `tests` (UI test classes)
-- Test resources: `src/test/resources`
+You can override via JVM props, for example:
+```bash
+./gradlew test -Dui.baseUrl=http://localhost:5174 -Dapi.baseUrl=http://localhost:8080
+```
 
-## Common Gradle Tasks
-- `./gradlew clean` - clean build outputs
-- `./gradlew test` - run UI test suite
-- `./gradlew build` - compile and run all checks
+## Project Structure
+- `src/test/java/com/example/fintech/ui/config`
+- `src/test/java/com/example/fintech/ui/pages`
+- `src/test/java/com/example/fintech/ui/support/api`
+- `src/test/java/com/example/fintech/ui/tests`
 
 ## Notes
 - Browser configuration is centralized in `src/test/java/com/example/fintech/ui/config/SelenideConfig.java`.
