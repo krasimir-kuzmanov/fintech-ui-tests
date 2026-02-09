@@ -1,0 +1,26 @@
+plugins {
+  id 'java'
+}
+
+group = 'com.example.fintech'
+version = '1.0.0'
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+  testImplementation 'com.codeborne:selenide:7.3.0'
+  testImplementation 'io.rest-assured:rest-assured:5.4.0'
+}
+
+test {
+  useJUnitPlatform()
+}
