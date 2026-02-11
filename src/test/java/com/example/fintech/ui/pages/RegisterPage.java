@@ -14,7 +14,6 @@ public class RegisterPage extends BasePage<RegisterPage> {
   private final SelenideElement username = $("[data-testid='register-username']");
   private final SelenideElement password = $("[data-testid='register-password']");
   private final SelenideElement submit = $("[data-testid='register-submit']");
-  private final SelenideElement error = $("[data-testid='register-error']");
   private final SelenideElement success = $("[data-testid='register-success']");
   private final SelenideElement backToLogin = $("[data-testid='go-to-login']");
 
@@ -56,15 +55,6 @@ public class RegisterPage extends BasePage<RegisterPage> {
 
   public void goToLogin() {
     backToLogin.shouldBe(visible).click();
-  }
-
-  public RegisterPage shouldShowError() {
-    error.shouldBe(visible);
-    return this;
-  }
-
-  public boolean isSuccessVisible() {
-    return success.shouldBe(visible).isDisplayed();
   }
 
   public RegisterPage shouldShowSuccess() {
