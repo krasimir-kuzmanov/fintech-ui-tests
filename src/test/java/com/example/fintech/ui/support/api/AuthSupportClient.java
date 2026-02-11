@@ -43,6 +43,15 @@ public class AuthSupportClient {
     return response;
   }
 
+  public String loginAndGetToken(LoginRequest request) {
+    Response response = loginExpectOk(request);
+    String token = response.jsonPath().getString("token");
+    if (token == null || token.isBlank()) {
+      throw new IllegalStateException("Login response token should not be blank");
+    }
+    return token;
+  }
+
   public Response logout(String token) {
     return ApiSupport.authRequest(token)
         .when()

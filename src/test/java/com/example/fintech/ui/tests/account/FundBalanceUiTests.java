@@ -46,26 +46,13 @@ class FundBalanceUiTests extends BaseUiTest {
     dashboardPage.shouldHaveBalance(FundBalanceUiTests.FUND_AMOUNT);
 
     // when
-    String token = loginAndReturnToken(user);
+    String token = authSupportClient.loginAndGetToken(new LoginRequest(user.username(), user.password()));
     BigDecimal apiBalance = fetchApiBalance(accountId, token);
 
     // then
     assertThat(apiBalance)
         .as("API balance should equal funded amount")
         .isEqualByComparingTo(FUND_AMOUNT);
-  }
-
-  private String loginAndReturnToken(RegisterRequest user) {
-    LoginRequest loginRequest = new LoginRequest(user.username(), user.password());
-    Response loginResponse = authSupportClient.loginExpectOk(loginRequest);
-    JsonPath loginJson = loginResponse.jsonPath();
-    String accountId = loginJson.getString("userId");
-    String token = loginJson.getString("token");
-
-    assertThat(accountId).isNotBlank();
-    assertThat(token).isNotBlank();
-
-    return token;
   }
 
   private BigDecimal fetchApiBalance(String accountId, String token) {

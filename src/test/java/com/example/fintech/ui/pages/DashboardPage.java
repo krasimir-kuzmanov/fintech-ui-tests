@@ -3,6 +3,10 @@ package com.example.fintech.ui.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
@@ -119,13 +123,16 @@ public class DashboardPage extends BasePage<DashboardPage> {
     return this;
   }
 
-  public String lastTransactionAmountText() {
-    return transactionItems
-        .last()
-        .shouldBe(visible)
-        .$("div:last-child")
-        .shouldBe(visible)
-        .getText();
+  public List<String> transactionTexts() {
+    return transactionItems.texts();
+  }
+
+  public Set<String> uiTransactionIds() {
+    Set<String> transactionIds = new LinkedHashSet<>();
+    for (SelenideElement transactionItem : transactionItems) {
+      transactionIds.add(transactionItem.getAttribute("data-txid"));
+    }
+    return transactionIds;
   }
 
   public void logout() {
