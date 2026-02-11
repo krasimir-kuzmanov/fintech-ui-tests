@@ -39,17 +39,15 @@ public class RegisterPage extends BasePage<RegisterPage> {
     submit();
   }
 
-  public RegisterPage setUsername(String value) {
+  private void setUsername(String value) {
     username.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public RegisterPage setPassword(String value) {
+  private void setPassword(String value) {
     password.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public void submit() {
+  private void submit() {
     submit.shouldBe(visible).click();
   }
 
@@ -57,8 +55,7 @@ public class RegisterPage extends BasePage<RegisterPage> {
     backToLogin.shouldBe(visible).click();
   }
 
-  public RegisterPage shouldShowSuccess() {
+  public void shouldShowSuccess() {
     success.shouldBe(visible);
-    return this;
   }
 }
