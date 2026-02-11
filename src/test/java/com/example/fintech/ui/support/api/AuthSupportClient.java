@@ -37,6 +37,12 @@ public class AuthSupportClient {
         .post(LOGIN_ENDPOINT);
   }
 
+  public Response loginExpectOk(LoginRequest request) {
+    Response response = login(request);
+    response.then().statusCode(HttpConstants.STATUS_OK);
+    return response;
+  }
+
   public Response logout(String token) {
     return ApiSupport.authRequest(token)
         .when()
