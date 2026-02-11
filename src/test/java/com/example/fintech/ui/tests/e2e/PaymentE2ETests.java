@@ -159,11 +159,7 @@ class PaymentE2ETests extends BaseUiTest {
     return findNewTransactions(before, after, 1).getFirst();
   }
 
-  private List<Map<String, Object>> findNewTransactions(
-      List<Map<String, Object>> before,
-      List<Map<String, Object>> after,
-      int expectedCount
-  ) {
+  private List<Map<String, Object>> findNewTransactions(List<Map<String, Object>> before, List<Map<String, Object>> after, int expectedCount) {
     Set<String> beforeIds = extractTransactionIds(before);
     List<Map<String, Object>> newTransactions = after.stream()
         .filter(transaction -> !beforeIds.contains(String.valueOf(transaction.get("transactionId"))))
@@ -182,11 +178,7 @@ class PaymentE2ETests extends BaseUiTest {
         .collect(Collectors.toSet());
   }
 
-  private void assertNewPaymentTransaction(
-      Map<String, Object> newTransaction,
-      String expectedFromAccountId,
-      String expectedToAccountId
-  ) {
+  private void assertNewPaymentTransaction(Map<String, Object> newTransaction, String expectedFromAccountId, String expectedToAccountId) {
     assertThat(new BigDecimal(String.valueOf(newTransaction.get("amount"))))
         .as("New API transaction amount should match payment amount")
         .isEqualByComparingTo(PaymentE2ETests.PAYMENT_AMOUNT_VALUE);
@@ -200,11 +192,7 @@ class PaymentE2ETests extends BaseUiTest {
         .isEqualTo(expectedToAccountId);
   }
 
-  private void assertNewTransactionsForAliceToBob(
-      List<Map<String, Object>> newTransactions,
-      String aliceAccountId,
-      String bobAccountId
-  ) {
+  private void assertNewTransactionsForAliceToBob(List<Map<String, Object>> newTransactions, String aliceAccountId, String bobAccountId) {
     List<BigDecimal> newTransactionAmounts = newTransactions.stream()
         .map(transaction -> new BigDecimal(String.valueOf(transaction.get("amount"))))
         .toList();
@@ -232,11 +220,7 @@ class PaymentE2ETests extends BaseUiTest {
         .isEqualTo(uiCount);
   }
 
-  private void assertUiMatchesApiTransactions(
-      DashboardPage dashboardPage,
-      Set<String> expectedTransactionIds,
-      int expectedCount
-  ) {
+  private void assertUiMatchesApiTransactions(DashboardPage dashboardPage, Set<String> expectedTransactionIds, int expectedCount) {
     assertThat(dashboardPage.uiTransactionIds())
         .as("UI must display expected transaction ids")
         .containsAll(expectedTransactionIds);
