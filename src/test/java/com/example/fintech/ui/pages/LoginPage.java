@@ -7,6 +7,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
 
+  public static final String URL = "/login";
+
   private final SelenideElement username = $("[data-testid='login-username']");
   private final SelenideElement password = $("[data-testid='login-password']");
   private final SelenideElement submit = $("[data-testid='login-submit']");
@@ -15,7 +17,7 @@ public class LoginPage extends BasePage<LoginPage> {
 
   @Override
   protected String url() {
-    return "/login";
+    return URL;
   }
 
   @Override

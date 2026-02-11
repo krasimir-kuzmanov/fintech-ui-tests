@@ -7,6 +7,8 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class RegisterPage extends BasePage<RegisterPage> {
 
+  public static final String URL = "/register";
+
   private final SelenideElement page = $("[data-testid='register-page']");
   private final SelenideElement form = $("[data-testid='register-form']");
   private final SelenideElement username = $("[data-testid='register-username']");
@@ -18,7 +20,7 @@ public class RegisterPage extends BasePage<RegisterPage> {
 
   @Override
   protected String url() {
-    return "/register";
+    return URL;
   }
 
   @Override
