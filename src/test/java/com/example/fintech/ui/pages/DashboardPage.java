@@ -3,6 +3,12 @@ package com.example.fintech.ui.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
+import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.$;
@@ -39,20 +45,19 @@ public class DashboardPage extends BasePage<DashboardPage> {
     return this;
   }
 
-  public SelenideElement balanceSection() {
-    return balanceSection;
+  public DashboardPage shouldHaveBalance(String expectedBalance) {
+    balanceValue.shouldBe(visible).shouldHave(exactText(expectedBalance));
+    return this;
   }
 
-  public SelenideElement balanceValue() {
-    return balanceValue;
+  public DashboardPage shouldShowBalanceSection() {
+    balanceSection.shouldBe(visible);
+    return this;
   }
 
-  public String balanceValueText() {
-    return balanceValue.shouldBe(visible).getText();
-  }
-
-  public SelenideElement dashboardError() {
-    return dashboardError;
+  public DashboardPage shouldShowDashboardError() {
+    dashboardError.shouldBe(visible);
+    return this;
   }
 
   public DashboardPage setFundAmount(String value) {
@@ -69,8 +74,9 @@ public class DashboardPage extends BasePage<DashboardPage> {
     submitFund();
   }
 
-  public SelenideElement fundError() {
-    return fundError;
+  public DashboardPage shouldShowFundError() {
+    fundError.shouldBe(visible);
+    return this;
   }
 
   public DashboardPage setPaymentToAccount(String value) {
@@ -93,24 +99,40 @@ public class DashboardPage extends BasePage<DashboardPage> {
     submitPayment();
   }
 
-  public SelenideElement paymentError() {
-    return paymentError;
+  public DashboardPage shouldShowPaymentError() {
+    paymentError.shouldBe(visible);
+    return this;
   }
 
-  public SelenideElement paymentSuccess() {
-    return paymentSuccess;
+  public DashboardPage shouldShowPaymentSuccess() {
+    paymentSuccess.shouldBe(visible);
+    return this;
   }
 
-  public SelenideElement transactionsSection() {
-    return transactionsSection;
-  }
-
-  public ElementsCollection transactionItems() {
-    return transactionItems;
+  public DashboardPage shouldShowTransactionsSection() {
+    transactionsSection.shouldBe(visible);
+    return this;
   }
 
   public int transactionItemsCount() {
     return transactionItems.size();
+  }
+
+  public DashboardPage shouldHaveTransactionCountGreaterThan(int count) {
+    transactionItems.shouldHave(sizeGreaterThan(count));
+    return this;
+  }
+
+  public List<String> transactionTexts() {
+    return transactionItems.texts();
+  }
+
+  public Set<String> uiTransactionIds() {
+    Set<String> transactionIds = new LinkedHashSet<>();
+    for (SelenideElement transactionItem : transactionItems) {
+      transactionIds.add(transactionItem.getAttribute("data-txid"));
+    }
+    return transactionIds;
   }
 
   public void logout() {

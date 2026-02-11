@@ -49,8 +49,9 @@ public class LoginPage extends BasePage<LoginPage> {
     submit.shouldBe(visible).click();
   }
 
-  public SelenideElement error() {
-    return error;
+  public LoginPage shouldShowError() {
+    error.shouldBe(visible);
+    return this;
   }
 
   public void goToRegister() {

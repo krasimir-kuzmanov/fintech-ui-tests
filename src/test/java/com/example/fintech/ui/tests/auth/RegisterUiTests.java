@@ -26,7 +26,7 @@ class RegisterUiTests extends BaseUiTest {
     registerPage.register(user.username(), user.password());
 
     // then
-    assertThat(registerPage.isSuccessVisible()).isTrue();
+    registerPage.shouldShowSuccess();
     assertUserExistsWithUsername(user.username());
   }
 
