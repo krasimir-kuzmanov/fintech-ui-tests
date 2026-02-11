@@ -14,7 +14,7 @@ UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 - SDKMAN available (project includes `.sdkmanrc`)
 - No local Gradle install required (wrapper included)
 - `fintech-backend` running (default: `http://localhost:8080`)
-- `fintech-frontend` running (default: `http://localhost:5174`)
+- `fintech-frontend` running (default: `http://localhost:5173`)
 
 ## Run
 ```bash
@@ -36,7 +36,7 @@ Optional:
 
 You can override via JVM props, for example:
 ```bash
-./gradlew test -Dui.baseUrl=http://localhost:5174 -Dapi.baseUrl=http://localhost:8080
+./gradlew test -Dui.baseUrl=http://localhost:5173 -Dapi.baseUrl=http://localhost:8080
 ```
 
 ## Project Structure
