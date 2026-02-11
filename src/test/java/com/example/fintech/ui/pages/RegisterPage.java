@@ -63,4 +63,8 @@ public class RegisterPage extends BasePage<RegisterPage> {
   public SelenideElement success() {
     return success;
   }
+
+  public boolean isSuccessVisible() {
+    return success.shouldBe(visible).isDisplayed();
+  }
 }
