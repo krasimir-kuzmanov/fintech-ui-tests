@@ -3,6 +3,7 @@ package com.example.fintech.ui.pages;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$$;
@@ -111,6 +112,20 @@ public class DashboardPage extends BasePage<DashboardPage> {
 
   public int transactionItemsCount() {
     return transactionItems.size();
+  }
+
+  public DashboardPage shouldHaveTransactionCountGreaterThan(int count) {
+    transactionItems.shouldHave(sizeGreaterThan(count));
+    return this;
+  }
+
+  public String lastTransactionAmountText() {
+    return transactionItems
+        .last()
+        .shouldBe(visible)
+        .$("div:last-child")
+        .shouldBe(visible)
+        .getText();
   }
 
   public void logout() {
