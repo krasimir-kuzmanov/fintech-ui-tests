@@ -34,17 +34,15 @@ public class LoginPage extends BasePage<LoginPage> {
     submit();
   }
 
-  public LoginPage setUsername(String value) {
+  private void setUsername(String value) {
     username.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public LoginPage setPassword(String value) {
+  private void setPassword(String value) {
     password.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public void submit() {
+  private void submit() {
     submit.shouldBe(visible).click();
   }
 

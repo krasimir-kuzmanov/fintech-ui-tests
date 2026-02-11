@@ -42,9 +42,8 @@ public class DashboardPage extends BasePage<DashboardPage> {
     return this;
   }
 
-  public DashboardPage shouldHaveBalance(String expectedBalance) {
+  public void shouldHaveBalance(String expectedBalance) {
     balanceValue.shouldBe(visible).shouldHave(exactText(expectedBalance));
-    return this;
   }
 
   public void fund(String value) {
@@ -52,17 +51,15 @@ public class DashboardPage extends BasePage<DashboardPage> {
     submitFund();
   }
 
-  public DashboardPage shouldShowFundError() {
+  public void shouldShowFundError() {
     fundError.shouldBe(visible);
-    return this;
   }
 
-  public DashboardPage setFundAmount(String value) {
+  private void setFundAmount(String value) {
     fundAmount.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public void submitFund() {
+  private void submitFund() {
     fundSubmit.shouldBe(visible).click();
   }
 
@@ -72,22 +69,19 @@ public class DashboardPage extends BasePage<DashboardPage> {
     submitPayment();
   }
 
-  public DashboardPage shouldShowPaymentSuccess() {
+  public void shouldShowPaymentSuccess() {
     paymentSuccess.shouldBe(visible);
-    return this;
   }
 
-  public DashboardPage setPaymentToAccount(String value) {
+  private void setPaymentToAccount(String value) {
     paymentToAccount.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public DashboardPage setPaymentAmount(String value) {
+  private void setPaymentAmount(String value) {
     paymentAmount.shouldBe(visible).setValue(value);
-    return this;
   }
 
-  public void submitPayment() {
+  private void submitPayment() {
     paymentSubmit.shouldBe(visible).click();
   }
 
@@ -95,9 +89,8 @@ public class DashboardPage extends BasePage<DashboardPage> {
     return transactionItems.size();
   }
 
-  public DashboardPage shouldHaveTransactionCountGreaterThan(int count) {
+  public void shouldHaveTransactionCountGreaterThan(int count) {
     transactionItems.shouldHave(sizeGreaterThan(count));
-    return this;
   }
 
   public Set<String> uiTransactionIds() {

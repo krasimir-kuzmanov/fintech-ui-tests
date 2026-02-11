@@ -66,9 +66,8 @@ class PaymentE2ETests extends BaseUiTest {
 
     // and
     dashboardPage.makePayment(bobAccountId, PAYMENT_AMOUNT);
-    dashboardPage
-        .shouldShowPaymentSuccess()
-        .shouldHaveTransactionCountGreaterThan(uiCountBefore);
+    dashboardPage.shouldShowPaymentSuccess();
+    dashboardPage.shouldHaveTransactionCountGreaterThan(uiCountBefore);
 
     // then
     int uiCountAfter = dashboardPage.transactionItemsCount();
@@ -123,9 +122,8 @@ class PaymentE2ETests extends BaseUiTest {
     dashboardPage.makePayment(bobAccountId, PAYMENT_AMOUNT);
     dashboardPage.shouldShowPaymentSuccess();
     dashboardPage.makePayment(bobAccountId, SECOND_PAYMENT_AMOUNT);
-    dashboardPage
-        .shouldShowPaymentSuccess()
-        .shouldHaveTransactionCountGreaterThan(uiCountBefore + 1);
+    dashboardPage.shouldShowPaymentSuccess();
+    dashboardPage.shouldHaveTransactionCountGreaterThan(uiCountBefore + 1);
 
     // when
     List<Map<String, Object>> apiTransactionsAfter = transactionSupportClient
