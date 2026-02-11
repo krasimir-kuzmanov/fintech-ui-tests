@@ -7,9 +7,9 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class DashboardPage extends BasePage<DashboardPage> {
 
-  private final SelenideElement logout = $("button[data-testid='logout-button']");
-  private final SelenideElement balanceSection = $("div[data-testid='balance-section']");
-  private final SelenideElement balanceValue = $("div[data-testid='balance-value']");
+  private final SelenideElement logout = $("[data-testid='logout-button']");
+  private final SelenideElement balanceSection = $("[data-testid='balance-section']");
+  private final SelenideElement balanceValue = $("[data-testid='balance-value']");
 
   @Override
   protected String url() {

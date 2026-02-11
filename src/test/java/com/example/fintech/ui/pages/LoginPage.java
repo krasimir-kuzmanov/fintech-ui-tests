@@ -7,11 +7,11 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage extends BasePage<LoginPage> {
 
-  private final SelenideElement username = $("input[data-testid='login-username']");
-  private final SelenideElement password = $("input[data-testid='login-password']");
-  private final SelenideElement submit = $("button[data-testid='login-submit']");
-  private final SelenideElement error = $("div[data-testid='login-error']");
-  private final SelenideElement goToRegister = $("button[data-testid='go-to-register']");
+  private final SelenideElement username = $("[data-testid='login-username']");
+  private final SelenideElement password = $("[data-testid='login-password']");
+  private final SelenideElement submit = $("[data-testid='login-submit']");
+  private final SelenideElement error = $("[data-testid='login-error']");
+  private final SelenideElement goToRegister = $("[data-testid='go-to-register']");
 
   @Override
   protected String url() {

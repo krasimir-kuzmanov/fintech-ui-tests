@@ -5,6 +5,9 @@ import com.example.fintech.ui.support.model.RegisterRequest;
 import com.example.fintech.ui.support.testdata.HttpConstants;
 import io.restassured.response.Response;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+
 public class AuthSupportClient {
 
   private static final String REGISTER_ENDPOINT = "/auth/register";
@@ -18,9 +21,12 @@ public class AuthSupportClient {
         .post(REGISTER_ENDPOINT);
   }
 
-  public Response registerExpectOk(RegisterRequest request) {
+  public Response registerExpectOkOrCreated(RegisterRequest request) {
     Response response = register(request);
-    response.then().statusCode(HttpConstants.STATUS_OK);
+    response.then().statusCode(anyOf(
+        is(HttpConstants.STATUS_OK),
+        is(HttpConstants.STATUS_CREATED)
+    ));
     return response;
   }
 

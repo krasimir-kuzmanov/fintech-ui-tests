@@ -7,14 +7,14 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class RegisterPage extends BasePage<RegisterPage> {
 
-  private final SelenideElement page = $("div[data-testid='register-page']");
-  private final SelenideElement form = $("form[data-testid='register-form']");
-  private final SelenideElement username = $("input[data-testid='register-username']");
-  private final SelenideElement password = $("input[data-testid='register-password']");
-  private final SelenideElement submit = $("button[data-testid='register-submit']");
-  private final SelenideElement error = $("div[data-testid='register-error']");
-  private final SelenideElement success = $("div[data-testid='register-success']");
-  private final SelenideElement backToLogin = $("button[data-testid='go-to-login']");
+  private final SelenideElement page = $("[data-testid='register-page']");
+  private final SelenideElement form = $("[data-testid='register-form']");
+  private final SelenideElement username = $("[data-testid='register-username']");
+  private final SelenideElement password = $("[data-testid='register-password']");
+  private final SelenideElement submit = $("[data-testid='register-submit']");
+  private final SelenideElement error = $("[data-testid='register-error']");
+  private final SelenideElement success = $("[data-testid='register-success']");
+  private final SelenideElement backToLogin = $("[data-testid='go-to-login']");
 
   @Override
   protected String url() {

@@ -14,8 +14,8 @@ public final class ApiSupport {
   }
 
   public static RequestSpecification baseRequest() {
-    RestAssured.baseURI = SelenideConfig.apiBaseUrl();
     return RestAssured.given()
+        .baseUri(SelenideConfig.apiBaseUrl())
         .contentType(JSON)
         .accept(JSON);
   }

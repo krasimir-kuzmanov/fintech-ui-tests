@@ -16,7 +16,7 @@ class LoginUiTests extends BaseUiTest {
   void shouldLoginSuccessfullyAndOpenDashboard() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_login");
-    authSupportClient.registerExpectOk(user);
+    authSupportClient.registerExpectOkOrCreated(user);
 
     // when
     new LoginPage()
