@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 
-import static com.codeborne.selenide.Condition.exactText;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class FundBalanceUiTests extends BaseUiTest {
@@ -44,7 +43,7 @@ class FundBalanceUiTests extends BaseUiTest {
     dashboardPage.fund(FUND_AMOUNT);
 
     // then
-    assertUiBalanceEquals(dashboardPage);
+    dashboardPage.shouldHaveBalance(FundBalanceUiTests.FUND_AMOUNT);
 
     // when
     String token = loginAndReturnToken(user);
@@ -54,14 +53,6 @@ class FundBalanceUiTests extends BaseUiTest {
     assertThat(apiBalance)
         .as("API balance should equal funded amount")
         .isEqualByComparingTo(FUND_AMOUNT);
-  }
-
-  private void assertUiBalanceEquals(DashboardPage dashboardPage) {
-    dashboardPage.balanceValue().shouldHave(exactText(FUND_AMOUNT));
-    String balanceAfterFunding = dashboardPage.balanceValueText();
-    assertThat(balanceAfterFunding)
-        .as("Balance should equal funded amount for a new account")
-        .isEqualTo(FUND_AMOUNT);
   }
 
   private String loginAndReturnToken(RegisterRequest user) {

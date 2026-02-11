@@ -58,15 +58,17 @@ public class RegisterPage extends BasePage<RegisterPage> {
     backToLogin.shouldBe(visible).click();
   }
 
-  public SelenideElement error() {
-    return error;
-  }
-
-  public SelenideElement success() {
-    return success;
+  public RegisterPage shouldShowError() {
+    error.shouldBe(visible);
+    return this;
   }
 
   public boolean isSuccessVisible() {
     return success.shouldBe(visible).isDisplayed();
+  }
+
+  public RegisterPage shouldShowSuccess() {
+    success.shouldBe(visible);
+    return this;
   }
 }
