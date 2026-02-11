@@ -7,13 +7,15 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class DashboardPage extends BasePage<DashboardPage> {
 
+  public static final String URL = "/dashboard";
+
   private final SelenideElement logout = $("[data-testid='logout-button']");
   private final SelenideElement balanceSection = $("[data-testid='balance-section']");
   private final SelenideElement balanceValue = $("[data-testid='balance-value']");
 
   @Override
   protected String url() {
-    return "/dashboard";
+    return URL;
   }
 
   @Override
