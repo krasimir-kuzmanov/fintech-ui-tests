@@ -21,6 +21,8 @@ UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 sdk env
 ./gradlew test
 ```
+UI routes under test: `/login`, `/register`, `/dashboard`.
+Tests assume Google Chrome is installed and available locally.
 
 ## Configuration
 Loaded from `src/test/resources/application.properties`.

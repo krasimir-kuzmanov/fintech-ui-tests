@@ -1,8 +1,12 @@
 package com.example.fintech.ui.support.api;
 
-import com.example.fintech.ui.support.model.request.LoginRequest;
-import com.example.fintech.ui.support.model.request.RegisterRequest;
+import com.example.fintech.ui.support.model.LoginRequest;
+import com.example.fintech.ui.support.model.RegisterRequest;
+import com.example.fintech.ui.support.testdata.HttpConstants;
 import io.restassured.response.Response;
+
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 
 public class AuthSupportClient {
 
@@ -15,6 +19,15 @@ public class AuthSupportClient {
         .body(request)
         .when()
         .post(REGISTER_ENDPOINT);
+  }
+
+  public Response registerExpectOkOrCreated(RegisterRequest request) {
+    Response response = register(request);
+    response.then().statusCode(anyOf(
+        is(HttpConstants.STATUS_OK),
+        is(HttpConstants.STATUS_CREATED)
+    ));
+    return response;
   }
 
   public Response login(LoginRequest request) {

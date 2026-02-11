@@ -1,6 +1,6 @@
 package com.example.fintech.ui.support.testdata;
 
-import com.example.fintech.ui.support.model.request.RegisterRequest;
+import com.example.fintech.ui.support.model.RegisterRequest;
 
 import java.util.UUID;
 
