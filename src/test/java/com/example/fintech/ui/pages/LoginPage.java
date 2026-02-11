@@ -12,7 +12,6 @@ public class LoginPage extends BasePage<LoginPage> {
   private final SelenideElement username = $("[data-testid='login-username']");
   private final SelenideElement password = $("[data-testid='login-password']");
   private final SelenideElement submit = $("[data-testid='login-submit']");
-  private final SelenideElement error = $("[data-testid='login-error']");
   private final SelenideElement goToRegister = $("[data-testid='go-to-register']");
 
   @Override
@@ -47,11 +46,6 @@ public class LoginPage extends BasePage<LoginPage> {
 
   public void submit() {
     submit.shouldBe(visible).click();
-  }
-
-  public LoginPage shouldShowError() {
-    error.shouldBe(visible);
-    return this;
   }
 
   public void goToRegister() {

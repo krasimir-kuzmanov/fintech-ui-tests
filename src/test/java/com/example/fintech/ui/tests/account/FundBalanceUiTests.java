@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FundBalanceUiTests extends BaseUiTest {
 
   private static final String FUND_AMOUNT = "75.25";
+  private static final String INVALID_FUND_AMOUNT = "-10";
 
   private final AccountSupportClient accountSupportClient = new AccountSupportClient();
   private final AuthSupportClient authSupportClient = new AuthSupportClient();
@@ -53,6 +54,38 @@ class FundBalanceUiTests extends BaseUiTest {
     assertThat(apiBalance)
         .as("API balance should equal funded amount")
         .isEqualByComparingTo(FUND_AMOUNT);
+  }
+
+  @Test
+  void shouldShowFundErrorWhenAmountIsInvalid() {
+    // given
+    RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_fund_invalid");
+    Response registerResponse = authSupportClient.registerExpectOkOrCreated(user);
+
+    // and
+    String accountId = registerResponse.jsonPath().getString("id");
+    String token = authSupportClient.loginAndGetToken(new LoginRequest(user.username(), user.password()));
+    BigDecimal balanceBefore = fetchApiBalance(accountId, token);
+
+    // when
+    new LoginPage()
+        .open()
+        .login(user.username(), user.password());
+
+    // and
+    DashboardPage dashboardPage = new DashboardPage().shouldBeOpened();
+    dashboardPage.fund(INVALID_FUND_AMOUNT);
+
+    // then
+    dashboardPage.shouldShowFundError();
+
+    // when
+    BigDecimal balanceAfter = fetchApiBalance(accountId, token);
+
+    // then
+    assertThat(balanceAfter)
+        .as("Balance should stay unchanged after invalid funding attempt")
+        .isEqualByComparingTo(balanceBefore);
   }
 
   private BigDecimal fetchApiBalance(String accountId, String token) {

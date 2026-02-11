@@ -4,7 +4,6 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import static com.codeborne.selenide.CollectionCondition.sizeGreaterThan;
@@ -18,7 +17,6 @@ public class DashboardPage extends BasePage<DashboardPage> {
   public static final String URL = "/dashboard";
 
   private final SelenideElement logout = $("[data-testid='logout-button']");
-  private final SelenideElement dashboardError = $("[data-testid='dashboard-error']");
   private final SelenideElement balanceSection = $("[data-testid='balance-section']");
   private final SelenideElement balanceValue = $("[data-testid='balance-value']");
   private final SelenideElement fundAmount = $("[data-testid='fund-amount']");
@@ -27,7 +25,6 @@ public class DashboardPage extends BasePage<DashboardPage> {
   private final SelenideElement paymentToAccount = $("[data-testid='payment-to-account']");
   private final SelenideElement paymentAmount = $("[data-testid='payment-amount']");
   private final SelenideElement paymentSubmit = $("[data-testid='payment-submit']");
-  private final SelenideElement paymentError = $("[data-testid='payment-error']");
   private final SelenideElement paymentSuccess = $("[data-testid='payment-success']");
   private final SelenideElement transactionsSection = $("[data-testid='transactions-section']");
   private final ElementsCollection transactionItems = $$("[data-testid='transaction-item']");
@@ -50,13 +47,13 @@ public class DashboardPage extends BasePage<DashboardPage> {
     return this;
   }
 
-  public DashboardPage shouldShowBalanceSection() {
-    balanceSection.shouldBe(visible);
-    return this;
+  public void fund(String value) {
+    setFundAmount(value);
+    submitFund();
   }
 
-  public DashboardPage shouldShowDashboardError() {
-    dashboardError.shouldBe(visible);
+  public DashboardPage shouldShowFundError() {
+    fundError.shouldBe(visible);
     return this;
   }
 
@@ -69,13 +66,14 @@ public class DashboardPage extends BasePage<DashboardPage> {
     fundSubmit.shouldBe(visible).click();
   }
 
-  public void fund(String value) {
-    setFundAmount(value);
-    submitFund();
+  public void makePayment(String toAccount, String amount) {
+    setPaymentToAccount(toAccount);
+    setPaymentAmount(amount);
+    submitPayment();
   }
 
-  public DashboardPage shouldShowFundError() {
-    fundError.shouldBe(visible);
+  public DashboardPage shouldShowPaymentSuccess() {
+    paymentSuccess.shouldBe(visible);
     return this;
   }
 
@@ -93,27 +91,6 @@ public class DashboardPage extends BasePage<DashboardPage> {
     paymentSubmit.shouldBe(visible).click();
   }
 
-  public void makePayment(String toAccount, String amount) {
-    setPaymentToAccount(toAccount);
-    setPaymentAmount(amount);
-    submitPayment();
-  }
-
-  public DashboardPage shouldShowPaymentError() {
-    paymentError.shouldBe(visible);
-    return this;
-  }
-
-  public DashboardPage shouldShowPaymentSuccess() {
-    paymentSuccess.shouldBe(visible);
-    return this;
-  }
-
-  public DashboardPage shouldShowTransactionsSection() {
-    transactionsSection.shouldBe(visible);
-    return this;
-  }
-
   public int transactionItemsCount() {
     return transactionItems.size();
   }
@@ -121,10 +98,6 @@ public class DashboardPage extends BasePage<DashboardPage> {
   public DashboardPage shouldHaveTransactionCountGreaterThan(int count) {
     transactionItems.shouldHave(sizeGreaterThan(count));
     return this;
-  }
-
-  public List<String> transactionTexts() {
-    return transactionItems.texts();
   }
 
   public Set<String> uiTransactionIds() {
