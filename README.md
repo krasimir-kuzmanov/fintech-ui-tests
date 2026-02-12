@@ -1,5 +1,7 @@
 # fintech-ui-tests
 
+[![UI Tests](https://github.com/krasimir-kuzmanov/fintech-ui-tests/actions/workflows/ui-tests.yml/badge.svg)](https://github.com/krasimir-kuzmanov/fintech-ui-tests/actions/workflows/ui-tests.yml)
+
 UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 
 ## Tech Stack
