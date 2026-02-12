@@ -58,7 +58,7 @@ jobs:
         run: |
           cd fintech-frontend
           npm ci
-          nohup npm run dev -- --host 0.0.0.0 --port 5174 > frontend.log 2>&1 &
+          nohup npm run dev -- --host 0.0.0.0 --port 5173 > frontend.log 2>&1 &
           echo $! > frontend.pid
 
       - name: Wait for backend health
@@ -70,7 +70,7 @@ jobs:
 
       - name: Wait for frontend
         run: |
-          until curl -s -I http://localhost:5174/login | head -n 1 | grep -q "200\\|301\\|302"; do
+          until curl -s -I http://localhost:5173/login | head -n 1 | grep -q "200\\|301\\|302"; do
             echo "Waiting for frontend..."
             sleep 2
           done
@@ -81,10 +81,7 @@ jobs:
         run: |
           echo "Using Chrome at: $CHROME_BIN"
           "$CHROME_BIN" --version
-          ./gradlew clean test \
-            -Dui.baseUrl=http://localhost:5174 \
-            -Dapi.baseUrl=http://localhost:8080 \
-            -Dselenide.headless=true
+          ./gradlew clean test
 
       - name: Upload Gradle test report
         if: always()
