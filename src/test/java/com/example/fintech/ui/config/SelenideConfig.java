@@ -1,6 +1,7 @@
 package com.example.fintech.ui.config;
 
 import com.codeborne.selenide.Configuration;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -31,6 +32,7 @@ public final class SelenideConfig {
     Configuration.timeout = timeoutMs();
 
     Configuration.headless = false;
+    Configuration.browserCapabilities = chromeOptions();
 
     Configuration.savePageSource = false;
     Configuration.screenshots = true;
@@ -96,5 +98,21 @@ public final class SelenideConfig {
     }
 
     return properties;
+  }
+
+  private static ChromeOptions chromeOptions() {
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--window-size=1920,1080");
+
+    if (isCiEnvironment()) {
+      options.addArguments("--no-sandbox");
+      options.addArguments("--disable-dev-shm-usage");
+    }
+
+    return options;
+  }
+
+  private static boolean isCiEnvironment() {
+    return "true".equalsIgnoreCase(System.getenv("GITHUB_ACTIONS"));
   }
 }
