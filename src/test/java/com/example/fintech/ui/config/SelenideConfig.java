@@ -12,6 +12,7 @@ public final class SelenideConfig {
   private static final String CONFIG_UI_BASE_URL = "ui.baseUrl";
   private static final String CONFIG_API_BASE_URL = "api.baseUrl";
   private static final String CONFIG_TIMEOUT_MS = "selenide.timeoutMs";
+  private static final String CONFIG_HEADLESS = "selenide.headless";
 
   private static final int DEFAULT_TIMEOUT_MS = 10_000;
 
@@ -31,7 +32,7 @@ public final class SelenideConfig {
     Configuration.baseUrl = uiBaseUrl();
     Configuration.timeout = timeoutMs();
 
-    Configuration.headless = false;
+    Configuration.headless = headless();
     Configuration.browserCapabilities = chromeOptions();
 
     Configuration.savePageSource = false;
@@ -56,6 +57,12 @@ public final class SelenideConfig {
     } catch (NumberFormatException e) {
       return DEFAULT_TIMEOUT_MS;
     }
+  }
+
+  public static boolean headless() {
+    String defaultValue = isCiEnvironment() ? "true" : "false";
+    String value = getOrDefault(CONFIG_HEADLESS, defaultValue);
+    return Boolean.parseBoolean(value);
   }
 
   private static String getRequired(String key) {
@@ -103,6 +110,7 @@ public final class SelenideConfig {
   private static ChromeOptions chromeOptions() {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--window-size=1920,1080");
+    options.addArguments("--disable-gpu");
 
     if (isCiEnvironment()) {
       options.addArguments("--no-sandbox");

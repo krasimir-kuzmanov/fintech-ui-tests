@@ -47,14 +47,14 @@ jobs:
       - name: Start backend
         run: |
           cd fintech-backend
-          ./gradlew bootRun > backend.log 2>&1 &
+          nohup ./gradlew bootRun > backend.log 2>&1 &
           echo $! > backend.pid
 
       - name: Install and start frontend
         run: |
           cd fintech-frontend
           npm ci
-          npm run dev -- --host 0.0.0.0 --port 5174 > frontend.log 2>&1 &
+          nohup npm run dev -- --host 0.0.0.0 --port 5174 > frontend.log 2>&1 &
           echo $! > frontend.pid
 
       - name: Wait for backend health
@@ -71,13 +71,12 @@ jobs:
             sleep 2
           done
 
-      - name: Run UI tests (Chrome via Xvfb)
+      - name: Run UI tests
         run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          xvfb-run -a ./gradlew clean test \
+          ./gradlew clean test \
             -Dui.baseUrl=http://localhost:5174 \
-            -Dapi.baseUrl=http://localhost:8080
+            -Dapi.baseUrl=http://localhost:8080 \
+            -Dselenide.headless=true
 
       - name: Upload Gradle test report
         if: always()
