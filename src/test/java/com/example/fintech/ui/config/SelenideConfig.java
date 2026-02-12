@@ -111,6 +111,12 @@ public final class SelenideConfig {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--window-size=1920,1080");
     options.addArguments("--disable-gpu");
+    options.addArguments("--disable-software-rasterizer");
+    options.addArguments("--remote-allow-origins=*");
+
+    if (headless()) {
+      options.addArguments("--headless=new");
+    }
 
     if (isCiEnvironment()) {
       options.addArguments("--no-sandbox");

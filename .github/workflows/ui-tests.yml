@@ -34,6 +34,10 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Set up Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+
       - name: Make Gradle wrappers executable
         run: |
           chmod +x ./gradlew
@@ -72,7 +76,11 @@ jobs:
           done
 
       - name: Run UI tests
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}
         run: |
+          echo "Using Chrome at: $CHROME_BIN"
+          "$CHROME_BIN" --version
           ./gradlew clean test \
             -Dui.baseUrl=http://localhost:5174 \
             -Dapi.baseUrl=http://localhost:8080 \
