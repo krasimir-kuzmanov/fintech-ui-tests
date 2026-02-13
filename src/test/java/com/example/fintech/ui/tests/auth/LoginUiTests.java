@@ -16,7 +16,7 @@ class LoginUiTests extends BaseUiTest {
   void shouldLoginSuccessfullyAndOpenDashboard() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_login");
-    authSupportClient.registerExpectOkOrCreated(user);
+    authSupportClient.register(user);
 
     // when
     new LoginPage()
@@ -31,7 +31,7 @@ class LoginUiTests extends BaseUiTest {
   void shouldShowErrorForInvalidCredentialsAndStayOnLogin() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_login_invalid");
-    authSupportClient.registerExpectOkOrCreated(user);
+    authSupportClient.register(user);
 
     // when
     LoginPage loginPage = new LoginPage().open();

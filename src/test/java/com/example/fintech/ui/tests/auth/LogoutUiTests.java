@@ -18,7 +18,7 @@ class LogoutUiTests extends BaseUiTest {
   void shouldLogoutAndRedirectToLogin() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_logout");
-    authSupportClient.registerExpectOkOrCreated(user);
+    authSupportClient.register(user);
 
     // when
     new LoginPage()
