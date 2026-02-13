@@ -5,16 +5,17 @@ import com.example.fintech.ui.pages.LoginPage;
 import com.example.fintech.ui.support.api.AccountSupportClient;
 import com.example.fintech.ui.support.api.AuthSupportClient;
 import com.example.fintech.ui.support.api.TransactionSupportClient;
+import com.example.fintech.ui.support.model.AccountResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;
+import com.example.fintech.ui.support.model.TransactionResponse;
+import com.example.fintech.ui.support.model.UserResponse;
 import com.example.fintech.ui.support.testdata.UiTestDataFactory;
 import com.example.fintech.ui.tests.BaseUiTest;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,8 +53,7 @@ class PaymentE2ETests extends BaseUiTest {
 
     // and
     accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
-    Response transactionsBeforeResponse = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
-    List<Map<String, Object>> apiTransactionsBefore = transactionsBeforeResponse.jsonPath().getList("$");
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
 
     // when
     new LoginPage()
@@ -76,15 +76,14 @@ class PaymentE2ETests extends BaseUiTest {
         .isGreaterThan(uiCountBefore);
 
     // when
-    Response transactionsAfterResponse = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
-    List<Map<String, Object>> apiTransactionsAfter = transactionsAfterResponse.jsonPath().getList("$");
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
 
     // then
     assertApiTransactionsMatchUiCount(apiTransactionsAfter, uiCountAfter);
 
     // and
-    Map<String, Object> newTransaction = findNewTransaction(apiTransactionsBefore, apiTransactionsAfter);
-    String newTransactionId = String.valueOf(newTransaction.get("transactionId"));
+    TransactionResponse newTransaction = findNewTransaction(apiTransactionsBefore, apiTransactionsAfter);
+    String newTransactionId = newTransaction.transactionId();
     assertNewPaymentTransaction(newTransaction, aliceAccountId, bobAccountId);
 
     // and
@@ -104,10 +103,7 @@ class PaymentE2ETests extends BaseUiTest {
 
     // and
     accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
-    List<Map<String, Object>> apiTransactionsBefore = transactionSupportClient
-        .getTransactionsExpectOk(aliceAccountId, aliceToken)
-        .jsonPath()
-        .getList("$");
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
 
     // when
     new LoginPage()
@@ -126,13 +122,10 @@ class PaymentE2ETests extends BaseUiTest {
     dashboardPage.shouldHaveTransactionCountGreaterThan(uiCountBefore + 1);
 
     // when
-    List<Map<String, Object>> apiTransactionsAfter = transactionSupportClient
-        .getTransactionsExpectOk(aliceAccountId, aliceToken)
-        .jsonPath()
-        .getList("$");
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
 
     // then
-    List<Map<String, Object>> newTransactions = findNewTransactions(apiTransactionsBefore, apiTransactionsAfter, 2);
+    List<TransactionResponse> newTransactions = findNewTransactions(apiTransactionsBefore, apiTransactionsAfter, 2);
     Set<String> newTransactionIds = extractTransactionIds(newTransactions);
 
     // and
@@ -146,21 +139,21 @@ class PaymentE2ETests extends BaseUiTest {
   }
 
   private String registerAndGetAccountId(RegisterRequest request) {
-    Response registerResponse = authSupportClient.registerExpectOkOrCreated(request);
-    String accountId = registerResponse.jsonPath().getString("id");
+    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(request);
+    String accountId = registerResponse.id();
     assertThat(accountId).isNotBlank();
 
     return accountId;
   }
 
-  private Map<String, Object> findNewTransaction(List<Map<String, Object>> before, List<Map<String, Object>> after) {
+  private TransactionResponse findNewTransaction(List<TransactionResponse> before, List<TransactionResponse> after) {
     return findNewTransactions(before, after, 1).getFirst();
   }
 
-  private List<Map<String, Object>> findNewTransactions(List<Map<String, Object>> before, List<Map<String, Object>> after, int expectedCount) {
+  private List<TransactionResponse> findNewTransactions(List<TransactionResponse> before, List<TransactionResponse> after, int expectedCount) {
     Set<String> beforeIds = extractTransactionIds(before);
-    List<Map<String, Object>> newTransactions = after.stream()
-        .filter(transaction -> !beforeIds.contains(String.valueOf(transaction.get("transactionId"))))
+    List<TransactionResponse> newTransactions = after.stream()
+        .filter(transaction -> !beforeIds.contains(transaction.transactionId()))
         .toList();
 
     assertThat(newTransactions)
@@ -170,29 +163,29 @@ class PaymentE2ETests extends BaseUiTest {
     return newTransactions;
   }
 
-  private Set<String> extractTransactionIds(List<Map<String, Object>> transactions) {
+  private Set<String> extractTransactionIds(List<TransactionResponse> transactions) {
     return transactions.stream()
-        .map(transaction -> String.valueOf(transaction.get("transactionId")))
+        .map(TransactionResponse::transactionId)
         .collect(Collectors.toSet());
   }
 
-  private void assertNewPaymentTransaction(Map<String, Object> newTransaction, String expectedFromAccountId, String expectedToAccountId) {
-    assertThat(new BigDecimal(String.valueOf(newTransaction.get("amount"))))
+  private void assertNewPaymentTransaction(TransactionResponse newTransaction, String expectedFromAccountId, String expectedToAccountId) {
+    assertThat(newTransaction.amount())
         .as("New API transaction amount should match payment amount")
         .isEqualByComparingTo(PaymentE2ETests.PAYMENT_AMOUNT_VALUE);
 
-    assertThat(String.valueOf(newTransaction.get("fromAccountId")))
+    assertThat(newTransaction.fromAccountId())
         .as("New API transaction should be a debit from Alice")
         .isEqualTo(expectedFromAccountId);
 
-    assertThat(String.valueOf(newTransaction.get("toAccountId")))
+    assertThat(newTransaction.toAccountId())
         .as("New API transaction should be credited to Bob")
         .isEqualTo(expectedToAccountId);
   }
 
-  private void assertNewTransactionsForAliceToBob(List<Map<String, Object>> newTransactions, String aliceAccountId, String bobAccountId) {
+  private void assertNewTransactionsForAliceToBob(List<TransactionResponse> newTransactions, String aliceAccountId, String bobAccountId) {
     List<BigDecimal> newTransactionAmounts = newTransactions.stream()
-        .map(transaction -> new BigDecimal(String.valueOf(transaction.get("amount"))))
+        .map(TransactionResponse::amount)
         .toList();
 
     assertThat(newTransactionAmounts).hasSize(2);
@@ -200,15 +193,15 @@ class PaymentE2ETests extends BaseUiTest {
     assertThat(newTransactionAmounts).anySatisfy(amount -> assertThat(amount).isEqualByComparingTo(SECOND_PAYMENT_AMOUNT_VALUE));
 
     assertThat(newTransactions)
-        .extracting(transaction -> String.valueOf(transaction.get("fromAccountId")))
+        .extracting(TransactionResponse::fromAccountId)
         .containsOnly(aliceAccountId);
 
     assertThat(newTransactions)
-        .extracting(transaction -> String.valueOf(transaction.get("toAccountId")))
+        .extracting(TransactionResponse::toAccountId)
         .containsOnly(bobAccountId);
   }
 
-  private void assertApiTransactionsMatchUiCount(List<Map<String, Object>> apiTransactions, int uiCount) {
+  private void assertApiTransactionsMatchUiCount(List<TransactionResponse> apiTransactions, int uiCount) {
     assertThat(apiTransactions)
         .as("API should return at least one transaction")
         .isNotEmpty();
@@ -229,10 +222,8 @@ class PaymentE2ETests extends BaseUiTest {
   }
 
   private void assertFinalBalance(String accountId, String token) {
-    BigDecimal finalBalance = accountSupportClient
-        .getAccountExpectOk(accountId, token)
-        .jsonPath()
-        .getObject("balance", BigDecimal.class);
+    AccountResponse accountResponse = accountSupportClient.getAccountExpectOk(accountId, token);
+    BigDecimal finalBalance = accountResponse.balance();
 
     assertThat(finalBalance)
         .as("Final Alice balance should match cumulative payments")

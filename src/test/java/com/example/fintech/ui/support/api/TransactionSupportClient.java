@@ -1,22 +1,24 @@
 package com.example.fintech.ui.support.api;
 
-import com.example.fintech.ui.support.testdata.HttpConstants;
-import io.restassured.response.Response;
+import com.example.fintech.ui.support.model.TransactionResponse;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransactionSupportClient {
 
-  private static final String TRANSACTIONS_BY_ACCOUNT_ENDPOINT = "/transaction/{accountId}";
+  private final TransactionClient transactionClient = ApiSupport.client(TransactionClient.class);
 
-  public Response getTransactions(String accountId, String token) {
-    return ApiSupport.authRequest(token)
-        .pathParam("accountId", accountId)
-        .when()
-        .get(TRANSACTIONS_BY_ACCOUNT_ENDPOINT);
+  public List<TransactionResponse> getTransactions(String accountId, String token) {
+    return transactionClient.getTransactions(accountId, ApiSupport.bearerToken(token));
   }
 
-  public Response getTransactionsExpectOk(String accountId, String token) {
-    Response response = getTransactions(accountId, token);
-    response.then().statusCode(HttpConstants.STATUS_OK);
+  public List<TransactionResponse> getTransactionsExpectOk(String accountId, String token) {
+    List<TransactionResponse> response = getTransactions(accountId, token);
+    assertThat(response)
+        .as("Get transactions should return a non-null list")
+        .isNotNull();
     return response;
   }
 }

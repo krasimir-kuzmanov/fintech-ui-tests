@@ -1,50 +1,43 @@
 package com.example.fintech.ui.support.api;
 
+import com.example.fintech.ui.support.model.AuthResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;
-import com.example.fintech.ui.support.testdata.HttpConstants;
-import io.restassured.response.Response;
+import com.example.fintech.ui.support.model.UserResponse;
 
-import static org.hamcrest.Matchers.anyOf;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthSupportClient {
 
-  private static final String REGISTER_ENDPOINT = "/auth/register";
-  private static final String LOGIN_ENDPOINT = "/auth/login";
+  private final AuthClient authClient = ApiSupport.client(AuthClient.class);
 
-  public Response register(RegisterRequest request) {
-    return ApiSupport.baseRequest()
-        .body(request)
-        .when()
-        .post(REGISTER_ENDPOINT);
+  public UserResponse register(RegisterRequest request) {
+    return authClient.register(request);
   }
 
-  public Response registerExpectOkOrCreated(RegisterRequest request) {
-    Response response = register(request);
-    response.then().statusCode(anyOf(
-        is(HttpConstants.STATUS_OK),
-        is(HttpConstants.STATUS_CREATED)
-    ));
+  public UserResponse registerExpectOkOrCreated(RegisterRequest request) {
+    UserResponse response = register(request);
+    assertThat(response.id())
+        .as("Register response should contain user id")
+        .isNotBlank();
     return response;
   }
 
-  public Response login(LoginRequest request) {
-    return ApiSupport.baseRequest()
-        .body(request)
-        .when()
-        .post(LOGIN_ENDPOINT);
+  public AuthResponse login(LoginRequest request) {
+    return authClient.login(request);
   }
 
-  public Response loginExpectOk(LoginRequest request) {
-    Response response = login(request);
-    response.then().statusCode(HttpConstants.STATUS_OK);
+  public AuthResponse loginExpectOk(LoginRequest request) {
+    AuthResponse response = login(request);
+    assertThat(response.userId())
+        .as("Login response should contain user id")
+        .isNotBlank();
     return response;
   }
 
   public String loginAndGetToken(LoginRequest request) {
-    Response response = loginExpectOk(request);
-    String token = response.jsonPath().getString("token");
+    AuthResponse response = loginExpectOk(request);
+    String token = response.token();
     if (token == null || token.isBlank()) {
       throw new IllegalStateException("Login response token should not be blank");
     }

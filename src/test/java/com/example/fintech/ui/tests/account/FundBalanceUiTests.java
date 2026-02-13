@@ -4,12 +4,12 @@ import com.example.fintech.ui.pages.DashboardPage;
 import com.example.fintech.ui.pages.LoginPage;
 import com.example.fintech.ui.support.api.AccountSupportClient;
 import com.example.fintech.ui.support.api.AuthSupportClient;
+import com.example.fintech.ui.support.model.AccountResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;
+import com.example.fintech.ui.support.model.UserResponse;
 import com.example.fintech.ui.support.testdata.UiTestDataFactory;
 import com.example.fintech.ui.tests.BaseUiTest;
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -28,10 +28,10 @@ class FundBalanceUiTests extends BaseUiTest {
   void shouldFundAccountAndIncreaseBalance() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_fund");
-    Response registerResponse = authSupportClient.registerExpectOkOrCreated(user);
+    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(user);
 
     // and
-    String accountId = registerResponse.jsonPath().getString("id");
+    String accountId = registerResponse.id();
     assertThat(accountId).isNotBlank();
 
     // when
@@ -60,10 +60,10 @@ class FundBalanceUiTests extends BaseUiTest {
   void shouldShowFundErrorWhenAmountIsInvalid() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_fund_invalid");
-    Response registerResponse = authSupportClient.registerExpectOkOrCreated(user);
+    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(user);
 
     // and
-    String accountId = registerResponse.jsonPath().getString("id");
+    String accountId = registerResponse.id();
     String token = authSupportClient.loginAndGetToken(new LoginRequest(user.username(), user.password()));
     BigDecimal balanceBefore = fetchApiBalance(accountId, token);
 
@@ -89,9 +89,7 @@ class FundBalanceUiTests extends BaseUiTest {
   }
 
   private BigDecimal fetchApiBalance(String accountId, String token) {
-    Response accountResponse = accountSupportClient.getAccountExpectOk(accountId, token);
-    JsonPath accountJson = accountResponse.jsonPath();
-
-    return accountJson.getObject("balance", BigDecimal.class);
+    AccountResponse accountResponse = accountSupportClient.getAccountExpectOk(accountId, token);
+    return accountResponse.balance();
   }
 }
