@@ -1,29 +1,26 @@
 package com.example.fintech.ui.support.api;
 
-import com.example.fintech.ui.support.testdata.HttpConstants;
-import io.restassured.response.Response;
+import com.example.fintech.ui.support.model.UserResponse;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestSupportClient {
 
-  private static final String RESET_ENDPOINT = "/test/reset";
-  private static final String USER_BY_USERNAME_ENDPOINT = "/test/users/{username}";
+  private final TestClient testClient = ApiSupport.client(TestClient.class);
 
-  public Response reset() {
-    return ApiSupport.baseRequest()
-        .when()
-        .post(RESET_ENDPOINT);
+  public void reset() {
+    testClient.reset();
   }
 
-  public Response getUserByUsername(String username) {
-    return ApiSupport.baseRequest()
-        .pathParam("username", username)
-        .when()
-        .get(USER_BY_USERNAME_ENDPOINT);
+  public UserResponse getUserByUsername(String username) {
+    return testClient.getUserByUsername(username);
   }
 
-  public Response getUserByUsernameExpectOk(String username) {
-    Response response = getUserByUsername(username);
-    response.then().statusCode(HttpConstants.STATUS_OK);
+  public UserResponse getUserByUsernameExpectOk(String username) {
+    UserResponse response = getUserByUsername(username);
+    assertThat(response.id())
+        .as("Get user by username should return user id")
+        .isNotBlank();
     return response;
   }
 }

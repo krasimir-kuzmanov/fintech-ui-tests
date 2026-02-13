@@ -4,10 +4,9 @@ import com.example.fintech.ui.pages.LoginPage;
 import com.example.fintech.ui.pages.RegisterPage;
 import com.example.fintech.ui.support.api.TestSupportClient;
 import com.example.fintech.ui.support.model.RegisterRequest;
+import com.example.fintech.ui.support.model.UserResponse;
 import com.example.fintech.ui.support.testdata.UiTestDataFactory;
 import com.example.fintech.ui.tests.BaseUiTest;
-import io.restassured.path.json.JsonPath;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,11 +42,9 @@ class RegisterUiTests extends BaseUiTest {
   }
 
   private void assertUserExistsWithUsername(String expectedUsername) {
-    Response userResponse = testSupportClient.getUserByUsernameExpectOk(expectedUsername);
-    JsonPath userJson = userResponse.jsonPath();
-
-    String userId = userJson.getString("id");
-    String username = userJson.getString("username");
+    UserResponse userResponse = testSupportClient.getUserByUsernameExpectOk(expectedUsername);
+    String userId = userResponse.id();
+    String username = userResponse.username();
 
     assertThat(userId).isNotBlank();
     assertThat(username).isEqualTo(expectedUsername);

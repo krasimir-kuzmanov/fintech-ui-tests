@@ -9,7 +9,7 @@ UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 - Gradle Wrapper
 - JUnit 5
 - Selenide
-- RestAssured (for test support APIs and cross-checks)
+- OpenFeign + Jackson (for test support APIs and cross-checks)
 
 ## Requirements
 - Java 21

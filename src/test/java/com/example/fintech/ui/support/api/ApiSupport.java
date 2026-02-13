@@ -2,26 +2,25 @@ package com.example.fintech.ui.support.api;
 
 import com.example.fintech.ui.config.SelenideConfig;
 import com.example.fintech.ui.support.testdata.HttpConstants;
-import io.restassured.RestAssured;
-import io.restassured.specification.RequestSpecification;
-
-import static io.restassured.http.ContentType.JSON;
+import feign.Feign;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
 
 public final class ApiSupport {
+
+  private static final Feign.Builder FEIGN_BUILDER = Feign.builder()
+      .encoder(new JacksonEncoder())
+      .decoder(new JacksonDecoder());
 
   private ApiSupport() {
     // utility class
   }
 
-  public static RequestSpecification baseRequest() {
-    return RestAssured.given()
-        .baseUri(SelenideConfig.apiBaseUrl())
-        .contentType(JSON)
-        .accept(JSON);
+  public static <T> T client(Class<T> apiType) {
+    return FEIGN_BUILDER.target(apiType, SelenideConfig.apiBaseUrl());
   }
 
-  public static RequestSpecification authRequest(String token) {
-    return baseRequest()
-        .header(HttpConstants.AUTH_HEADER, HttpConstants.BEARER_PREFIX + token);
+  public static String bearerToken(String token) {
+    return HttpConstants.BEARER_PREFIX + token;
   }
 }
