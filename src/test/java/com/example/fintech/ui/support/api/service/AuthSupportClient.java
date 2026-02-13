@@ -1,5 +1,7 @@
-package com.example.fintech.ui.support.api;
+package com.example.fintech.ui.support.api.service;
 
+import com.example.fintech.ui.support.api.ApiSupport;
+import com.example.fintech.ui.support.api.client.AuthClient;
 import com.example.fintech.ui.support.model.AuthResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;

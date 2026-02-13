@@ -2,8 +2,8 @@ package com.example.fintech.ui.tests.account;
 
 import com.example.fintech.ui.pages.DashboardPage;
 import com.example.fintech.ui.pages.LoginPage;
-import com.example.fintech.ui.support.api.AccountSupportClient;
-import com.example.fintech.ui.support.api.AuthSupportClient;
+import com.example.fintech.ui.support.api.service.AccountSupportClient;
+import com.example.fintech.ui.support.api.service.AuthSupportClient;
 import com.example.fintech.ui.support.model.AccountResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;

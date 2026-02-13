@@ -2,9 +2,9 @@ package com.example.fintech.ui.tests.e2e;
 
 import com.example.fintech.ui.pages.DashboardPage;
 import com.example.fintech.ui.pages.LoginPage;
-import com.example.fintech.ui.support.api.AccountSupportClient;
-import com.example.fintech.ui.support.api.AuthSupportClient;
-import com.example.fintech.ui.support.api.TransactionSupportClient;
+import com.example.fintech.ui.support.api.service.AccountSupportClient;
+import com.example.fintech.ui.support.api.service.AuthSupportClient;
+import com.example.fintech.ui.support.api.service.TransactionSupportClient;
 import com.example.fintech.ui.support.model.AccountResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
 import com.example.fintech.ui.support.model.RegisterRequest;

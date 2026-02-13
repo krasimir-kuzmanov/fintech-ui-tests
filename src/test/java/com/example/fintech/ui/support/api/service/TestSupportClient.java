@@ -1,5 +1,7 @@
-package com.example.fintech.ui.support.api;
+package com.example.fintech.ui.support.api.service;
 
+import com.example.fintech.ui.support.api.ApiSupport;
+import com.example.fintech.ui.support.api.client.TestClient;
 import com.example.fintech.ui.support.model.UserResponse;
 
 public class TestSupportClient {
