@@ -33,6 +33,7 @@ class PaymentE2ETests extends BaseUiTest {
 
   private static final String SECOND_PAYMENT_AMOUNT = "20.00";
   private static final BigDecimal SECOND_PAYMENT_AMOUNT_VALUE = new BigDecimal(SECOND_PAYMENT_AMOUNT);
+  private static final String TOO_LARGE_PAYMENT_AMOUNT = "150.00";
 
   private static final BigDecimal EXPECTED_BALANCE_AFTER_TWO_PAYMENTS = new BigDecimal("40.00");
 
@@ -136,6 +137,56 @@ class PaymentE2ETests extends BaseUiTest {
 
     // and
     assertFinalBalance(aliceAccountId, aliceToken);
+  }
+
+  @Test
+  void shouldRejectPaymentWhenInsufficientFundsAndKeepUiApiInSync() {
+    // given
+    RegisterRequest alice = UiTestDataFactory.userWithPrefix(ALICE_PREFIX);
+    RegisterRequest bob = UiTestDataFactory.userWithPrefix(BOB_PREFIX);
+
+    // and
+    String aliceAccountId = registerAndGetAccountId(alice);
+    String bobAccountId = registerAndGetAccountId(bob);
+    String aliceToken = authSupportClient.loginAndGetToken(new LoginRequest(alice.username(), alice.password()));
+    accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
+
+    // and
+    BigDecimal balanceBefore = accountSupportClient.getAccountExpectOk(aliceAccountId, aliceToken).balance();
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+
+    // when
+    new LoginPage()
+        .open()
+        .login(alice.username(), alice.password());
+
+    // and
+    DashboardPage dashboardPage = new DashboardPage().shouldBeOpened();
+    int uiCountBefore = dashboardPage.transactionItemsCount();
+    dashboardPage.makePayment(bobAccountId, TOO_LARGE_PAYMENT_AMOUNT);
+
+    // then
+    dashboardPage.shouldShowPaymentError();
+    assertThat(dashboardPage.transactionItemsCount())
+        .as("UI transaction count should not change after rejected payment")
+        .isEqualTo(uiCountBefore);
+
+    // when
+    BigDecimal balanceAfter = accountSupportClient.getAccountExpectOk(aliceAccountId, aliceToken).balance();
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+
+    // then
+    assertThat(balanceAfter)
+        .as("Balance should remain unchanged after rejected payment")
+        .isEqualByComparingTo(balanceBefore);
+
+    assertThat(apiTransactionsAfter)
+        .as("Transactions should remain unchanged after rejected payment")
+        .hasSize(apiTransactionsBefore.size());
+
+    assertThat(extractTransactionIds(apiTransactionsAfter))
+        .as("Transaction ids should remain unchanged after rejected payment")
+        .containsExactlyInAnyOrderElementsOf(extractTransactionIds(apiTransactionsBefore));
   }
 
   private String registerAndGetAccountId(RegisterRequest request) {

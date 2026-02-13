@@ -25,6 +25,7 @@ public class DashboardPage extends BasePage<DashboardPage> {
   private final SelenideElement paymentToAccount = $("[data-testid='payment-to-account']");
   private final SelenideElement paymentAmount = $("[data-testid='payment-amount']");
   private final SelenideElement paymentSubmit = $("[data-testid='payment-submit']");
+  private final SelenideElement paymentError = $("[data-testid='payment-error']");
   private final SelenideElement paymentSuccess = $("[data-testid='payment-success']");
   private final SelenideElement transactionsSection = $("[data-testid='transactions-section']");
   private final ElementsCollection transactionItems = $$("[data-testid='transaction-item']");
@@ -71,6 +72,10 @@ public class DashboardPage extends BasePage<DashboardPage> {
 
   public void shouldShowPaymentSuccess() {
     paymentSuccess.shouldBe(visible);
+  }
+
+  public void shouldShowPaymentError() {
+    paymentError.shouldBe(visible);
   }
 
   private void setPaymentToAccount(String value) {
