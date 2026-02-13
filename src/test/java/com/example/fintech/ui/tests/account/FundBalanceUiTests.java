@@ -28,7 +28,7 @@ class FundBalanceUiTests extends BaseUiTest {
   void shouldFundAccountAndIncreaseBalance() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_fund");
-    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(user);
+    UserResponse registerResponse = authSupportClient.register(user);
 
     // and
     String accountId = registerResponse.id();
@@ -60,7 +60,7 @@ class FundBalanceUiTests extends BaseUiTest {
   void shouldShowFundErrorWhenAmountIsInvalid() {
     // given
     RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_fund_invalid");
-    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(user);
+    UserResponse registerResponse = authSupportClient.register(user);
 
     // and
     String accountId = registerResponse.id();
@@ -89,7 +89,7 @@ class FundBalanceUiTests extends BaseUiTest {
   }
 
   private BigDecimal fetchApiBalance(String accountId, String token) {
-    AccountResponse accountResponse = accountSupportClient.getAccountExpectOk(accountId, token);
+    AccountResponse accountResponse = accountSupportClient.getAccount(accountId, token);
     return accountResponse.balance();
   }
 }

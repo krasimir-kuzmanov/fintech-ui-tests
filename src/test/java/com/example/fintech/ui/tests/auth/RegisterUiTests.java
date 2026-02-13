@@ -42,7 +42,7 @@ class RegisterUiTests extends BaseUiTest {
   }
 
   private void assertUserExistsWithUsername(String expectedUsername) {
-    UserResponse userResponse = testSupportClient.getUserByUsernameExpectOk(expectedUsername);
+    UserResponse userResponse = testSupportClient.getUserByUsername(expectedUsername);
     String userId = userResponse.id();
     String username = userResponse.username();
 

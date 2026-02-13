@@ -53,8 +53,8 @@ class PaymentE2ETests extends BaseUiTest {
     String aliceToken = authSupportClient.loginAndGetToken(new LoginRequest(alice.username(), alice.password()));
 
     // and
-    accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
-    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    accountSupportClient.fund(aliceAccountId, FUND_AMOUNT, aliceToken);
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // when
     new LoginPage()
@@ -77,7 +77,7 @@ class PaymentE2ETests extends BaseUiTest {
         .isGreaterThan(uiCountBefore);
 
     // when
-    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // then
     assertApiTransactionsMatchUiCount(apiTransactionsAfter, uiCountAfter);
@@ -103,8 +103,8 @@ class PaymentE2ETests extends BaseUiTest {
     String aliceToken = authSupportClient.loginAndGetToken(new LoginRequest(alice.username(), alice.password()));
 
     // and
-    accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
-    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    accountSupportClient.fund(aliceAccountId, FUND_AMOUNT, aliceToken);
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // when
     new LoginPage()
@@ -123,7 +123,7 @@ class PaymentE2ETests extends BaseUiTest {
     dashboardPage.shouldHaveTransactionCountGreaterThan(uiCountBefore + 1);
 
     // when
-    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // then
     List<TransactionResponse> newTransactions = findNewTransactions(apiTransactionsBefore, apiTransactionsAfter, 2);
@@ -149,11 +149,11 @@ class PaymentE2ETests extends BaseUiTest {
     String aliceAccountId = registerAndGetAccountId(alice);
     String bobAccountId = registerAndGetAccountId(bob);
     String aliceToken = authSupportClient.loginAndGetToken(new LoginRequest(alice.username(), alice.password()));
-    accountSupportClient.fundExpectOk(aliceAccountId, FUND_AMOUNT, aliceToken);
+    accountSupportClient.fund(aliceAccountId, FUND_AMOUNT, aliceToken);
 
     // and
-    BigDecimal balanceBefore = accountSupportClient.getAccountExpectOk(aliceAccountId, aliceToken).balance();
-    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    BigDecimal balanceBefore = accountSupportClient.getAccount(aliceAccountId, aliceToken).balance();
+    List<TransactionResponse> apiTransactionsBefore = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // when
     new LoginPage()
@@ -172,8 +172,8 @@ class PaymentE2ETests extends BaseUiTest {
         .isEqualTo(uiCountBefore);
 
     // when
-    BigDecimal balanceAfter = accountSupportClient.getAccountExpectOk(aliceAccountId, aliceToken).balance();
-    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactionsExpectOk(aliceAccountId, aliceToken);
+    BigDecimal balanceAfter = accountSupportClient.getAccount(aliceAccountId, aliceToken).balance();
+    List<TransactionResponse> apiTransactionsAfter = transactionSupportClient.getTransactions(aliceAccountId, aliceToken);
 
     // then
     assertThat(balanceAfter)
@@ -190,7 +190,7 @@ class PaymentE2ETests extends BaseUiTest {
   }
 
   private String registerAndGetAccountId(RegisterRequest request) {
-    UserResponse registerResponse = authSupportClient.registerExpectOkOrCreated(request);
+    UserResponse registerResponse = authSupportClient.register(request);
     String accountId = registerResponse.id();
     assertThat(accountId).isNotBlank();
 
@@ -273,7 +273,7 @@ class PaymentE2ETests extends BaseUiTest {
   }
 
   private void assertFinalBalance(String accountId, String token) {
-    AccountResponse accountResponse = accountSupportClient.getAccountExpectOk(accountId, token);
+    AccountResponse accountResponse = accountSupportClient.getAccount(accountId, token);
     BigDecimal finalBalance = accountResponse.balance();
 
     assertThat(finalBalance)
