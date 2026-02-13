@@ -81,6 +81,7 @@ You can override via JVM properties:
 ### Authentication
 - user registration (happy path)
 - login (happy path)
+- login failure shows error and keeps user on login page
 - logout with route protection after logout
 
 ### Account & Balance
@@ -91,6 +92,7 @@ You can override via JVM properties:
 ### Payments (UI <-> API consistency)
 - single payment flow
 - multiple payments in one session
+- insufficient-funds payment shows UI error and preserves UI/API state
 - exact transaction ID appears in UI (`data-txid`)
 - UI transaction count matches backend API
 - backend transaction integrity is validated

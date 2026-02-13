@@ -26,4 +26,19 @@ class LoginUiTests extends BaseUiTest {
     // then
     new DashboardPage().shouldBeOpened();
   }
+
+  @Test
+  void shouldShowErrorForInvalidCredentialsAndStayOnLogin() {
+    // given
+    RegisterRequest user = UiTestDataFactory.userWithPrefix("ui_login_invalid");
+    authSupportClient.registerExpectOkOrCreated(user);
+
+    // when
+    LoginPage loginPage = new LoginPage().open();
+    loginPage.login(user.username(), "wrong_password");
+
+    // then
+    loginPage.shouldShowLoginError();
+    loginPage.shouldBeOpened();
+  }
 }
