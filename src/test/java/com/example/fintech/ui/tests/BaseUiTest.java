@@ -3,7 +3,7 @@ package com.example.fintech.ui.tests;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.example.fintech.ui.config.SelenideConfig;
-import com.example.fintech.ui.support.api.TestSupportClient;
+import com.example.fintech.ui.support.api.service.TestSupportClient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 

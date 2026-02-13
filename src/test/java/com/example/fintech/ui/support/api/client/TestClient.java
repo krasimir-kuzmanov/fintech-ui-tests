@@ -1,10 +1,10 @@
-package com.example.fintech.ui.support.api;
+package com.example.fintech.ui.support.api.client;
 
 import com.example.fintech.ui.support.model.UserResponse;
 import feign.Param;
 import feign.RequestLine;
 
-interface TestClient {
+public interface TestClient {
 
   @RequestLine("POST /test/reset")
   void reset();

@@ -1,4 +1,4 @@
-package com.example.fintech.ui.support.api;
+package com.example.fintech.ui.support.api.client;
 
 import com.example.fintech.ui.support.model.AuthResponse;
 import com.example.fintech.ui.support.model.LoginRequest;
@@ -7,7 +7,7 @@ import com.example.fintech.ui.support.model.UserResponse;
 import feign.Headers;
 import feign.RequestLine;
 
-interface AuthClient {
+public interface AuthClient {
 
   @RequestLine("POST /auth/register")
   @Headers("Content-Type: application/json")

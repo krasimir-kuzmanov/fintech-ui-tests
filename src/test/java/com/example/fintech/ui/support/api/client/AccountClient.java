@@ -1,4 +1,4 @@
-package com.example.fintech.ui.support.api;
+package com.example.fintech.ui.support.api.client;
 
 import com.example.fintech.ui.support.model.AccountResponse;
 import feign.Headers;
@@ -8,7 +8,7 @@ import feign.RequestLine;
 import java.math.BigDecimal;
 import java.util.Map;
 
-interface AccountClient {
+public interface AccountClient {
 
   @RequestLine("GET /account/{accountId}")
   @Headers("Authorization: {authorization}")
