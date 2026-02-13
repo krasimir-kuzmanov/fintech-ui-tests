@@ -11,9 +11,7 @@ UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 - Selenide
 - RestAssured (for test support APIs and cross-checks)
 
-## How to Run the UI Test Suite
-
-### Prerequisites
+## Requirements
 - Java 21
 - Node.js 18+ (recommended: 20)
 - Google Chrome (latest stable)
@@ -21,6 +19,7 @@ UI test suite for Fintech frontend flows using Selenide + JUnit 5.
 
 No local Gradle install is required (wrapper included).
 
+## Quick Start
 ### 1) Start the Backend
 ```bash
 cd ../fintech-backend
@@ -96,11 +95,17 @@ You can override via JVM properties:
 - UI transaction count matches backend API
 - backend transaction integrity is validated
 
-## Architecture
+## Project Structure
 - Selenide + JUnit 5
 - Page Object pattern
 - support API clients for setup and API assertions
 - deterministic test isolation via `/test/reset`
+
+## CI
+GitHub Actions workflow:
+- `.github/workflows/ui-tests.yml`
+
+It runs on push to `main`, pull requests, and manual dispatch.
 
 ## Notes
 - This suite is intentionally small and high-signal.
